@@ -106,7 +106,7 @@ function handleClick(evt) {
   }
   // switch players
   currPlayer === 1 ? currPlayer++ : currPlayer--;
-  playerspan.innerText = currPlayer;
+  playerspan.innerText = currPlayer; //updates visual current player
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
@@ -146,7 +146,7 @@ function checkForWin() {
 makeBoard();
 makeHtmlBoard();
 const resetbutton = document.getElementById('reset');
-resetbutton.addEventListener('click',(e)=>{
+resetbutton.addEventListener('click',(e)=>{ //resets all info to base state
   currPlayer = 1;
   playerspan.innerText = 1;
   makeBoard();
