@@ -10,15 +10,16 @@ const HEIGHT = 6;
 
 let currPlayer = 1; // active player: 1 or 2
 const board = []; // array of rows, each row is array of cells  (board[y][x])
+const playerspan = document.getElementById('playerNumber');
 
 /** makeBoard: create in-JS board structure:
  *    board = array of rows, each row is array of cells  (board[y][x])
  */
 
 function makeBoard() {
-  for(let y = 0; y < HEIGHT; y++){ //create HEIGHT number of rows(arrays)
+  for (let y = 0; y < HEIGHT; y++) { //create HEIGHT number of rows(arrays)
     board[y] = [];
-    for(let x = 0; x < WIDTH; x++){ //fill each row with WIDTH cells
+    for (let x = 0; x < WIDTH; x++) { //fill each row with WIDTH cells
       board[y][x] = null; //initializes them as null
     }
   }
@@ -53,8 +54,8 @@ function makeHtmlBoard() {
 /** findSpotForCol: given column x, return top empty y (null if filled) */
 
 function findSpotForCol(x) {
-  for(let y = HEIGHT-1; y >= 0; y--){ //starting at the bottom row
-    if (board[y][x] === null){ //if there is no piece in the cell, return that cell row, otherwise continue checking the cells above
+  for (let y = HEIGHT - 1; y >= 0; y--) { //starting at the bottom row
+    if (board[y][x] === null) { //if there is no piece in the cell, return that cell row, otherwise continue checking the cells above
       return y;
     }
   }
@@ -100,11 +101,12 @@ function handleClick(evt) {
   }
 
   // check for tie
-  if(board.every((val)=> val.every((cell) => cell !== null))){ //if every cell in every array is not null, the game is a tie
-    return endGame('Tie Game...'); 
+  if (board.every((val) => val.every((cell) => cell !== null))) { //if every cell in every array is not null, the game is a tie
+    return endGame('Tie Game...');
   }
   // switch players
   currPlayer === 1 ? currPlayer++ : currPlayer--;
+  playerspan.innerText = currPlayer;
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
@@ -126,7 +128,7 @@ function checkForWin() {
   }
 
   // TODO: read and understand this code. Add comments to help you.
-
+  /* creates arrays for each possible win condition for every cell on the board*/
   for (let y = 0; y < HEIGHT; y++) {
     for (let x = 0; x < WIDTH; x++) {
       const horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
@@ -134,7 +136,7 @@ function checkForWin() {
       const diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
       const diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
 
-      if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
+      if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) { //if any win condition is true, currPlayer has won
         return true;
       }
     }
@@ -143,3 +145,12 @@ function checkForWin() {
 
 makeBoard();
 makeHtmlBoard();
+const resetbutton = document.getElementById('reset');
+resetbutton.addEventListener('click',(e)=>{
+  currPlayer = 1;
+  playerspan.innerText = 1;
+  makeBoard();
+  const htmlBoard = document.getElementById("board");
+  htmlBoard.innerHTML = '';
+  makeHtmlBoard();
+})
